@@ -1,7 +1,40 @@
 # DUMMY-RS
 
-Implementation of Dummy for Rust
-https://blog.jroddev.com/smaller-clearer-tests/
+## Implementation of Dummy for Rust
+A 'dummy' is a random instance of a struct which I use heavily for testing.
+They are used in scenarios where you need a valid object but you don't really care about the details.
+```rs
+#{derive(Dummy)]
+struct User {
+    id: i64,
+    firstName: String,
+    lastName: String,
+    email: String,
+    email_verified: bool,
+    age: i32
+}
+
+...
+
+// Completely random user
+let users = User::dummy();
+let fullName = user.fullname();
+let expected = format!("{} {}", user.firstName, user.lastName);
+assert_eq(fullname, expected);
+
+...
+
+// Mostly random user. Age specified explicitly
+let user = User{
+    age: 18,
+    ...User::dummy()
+};
+assert(is_adult(user));
+
+```
+
+More details can be found here: https://blog.jroddev.com/smaller-clearer-tests/
+
 
 ## Basic Usage
 The derive macro will recursively build randomised/dummy constructors

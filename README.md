@@ -75,7 +75,7 @@ impl Dummy for Point {
 
 ## Complex Type 1
 The library supports nested custom structs (as long as the whole chain implements Dummy).
-Values can also be collections. By default I have implemented Vec, HashSet, and HashMap.
+The below complex type also has an explicit lifetime required for the &str member.
 ```rs
 #[derive (Debug)]
 struct ComplexType<'a> {
@@ -114,6 +114,7 @@ impl Dummy for &str {
 ```
 
 ## Complex Type 3
+Values can also be collections. By default I have implemented Vec, HashSet, and HashMap.
 Implementation of Dummy for HashMap shows a heavier use of generics.
 But the key type (K) and the value type (V) need to implement the Dummy train.
 Key type (K) also needs to support Eq and Hash to be used as the HashMap key

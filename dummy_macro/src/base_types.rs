@@ -21,8 +21,8 @@ impl Dummy for f32  { fn dummy() -> Self { random() }}
 impl Dummy for f64  { fn dummy() -> Self { random() }}
 
 
-impl Dummy for String  { 
-    fn dummy() -> Self { 
+impl Dummy for String  {
+    fn dummy() -> Self {
         let count = thread_rng().gen_range(3..32);
         rand::thread_rng()
             .sample_iter(&rand::distributions::Alphanumeric)

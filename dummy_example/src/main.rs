@@ -9,25 +9,35 @@ impl Dummy for D<i32> {
     }
 }
 
-// pub fn dummy<T> -> T {
-//     D::<T>::value()
-// }
-//
-// impl Dummy for i32 {
-//     fn dummy() -> i32 {
-//         random()
-//     }
-// }
-// impl Dummy for i64{ fn dummy() -> i64 { random() } }
-// impl Dummy for f32{ fn dummy() -> f32 { random() } }
-
-
-
 #[derive(Dummy, Debug)]
 struct Pancakes {
     x: i32,
     y: i32
 }
+
+#[derive(Dummy, Debug)]
+struct SSS {
+    s: String
+}
+
+#[derive(Dummy, Debug)]
+struct Tuple3(i32, f64, String);
+
+
+
+
+#[derive(Dummy, Debug)]
+struct Tuple0();
+
+
+
+// #[derive(Dummy)]
+// enum MyEnum {
+//     VariantA,
+//     VariantB(i32),
+//     VariantC{x: i32, y: i32, z:i32}
+// }
+
 
 // #[derive(Dummy, Debug)]
 // struct PancakeStack {
@@ -47,4 +57,6 @@ fn main() {
              });
 
     println!("other: {}", D::<i32>::dummy().0);
+    println!("Unit type: {:?}", Tuple0::dummy());
+    println!("Tuple type: {:?}", Tuple3::dummy());
 }

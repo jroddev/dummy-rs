@@ -40,7 +40,7 @@ fn main() {
     for i in 0..5 {
         println!("created a dummy:{:?}", Pancakes::dummy());
     }
-    println!("partial: {:?}", 
+    println!("partial: {:?}",
              Pancakes{
                  x: 7,
                 ..Pancakes::dummy()

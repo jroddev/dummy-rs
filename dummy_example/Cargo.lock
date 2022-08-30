@@ -20,6 +20,9 @@ dependencies = [
 [[package]]
 name = "dummy_macro"
 version = "0.1.0"
+dependencies = [
+ "rand",
+]
 
 [[package]]
 name = "dummy_macro_derive"

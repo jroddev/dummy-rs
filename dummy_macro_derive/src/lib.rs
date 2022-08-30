@@ -1,7 +1,13 @@
 use proc_macro::{TokenStream, Ident};
-use quote::{quote, ToTokens};
+use quote::quote;
 use syn::{self, Field};
-// use rand::seq::SliceRandom;
+extern crate proc_macro;
+
+/*
+    Group::delimiter::Brace = { }
+    Group::delimiter::Parenthesis = ( )
+    I can use these to determine dynamically which style needs to be used
+*/
 
 #[proc_macro_derive(Dummy)]
 pub fn dummy_macro_derive(input: TokenStream) -> TokenStream {
@@ -18,6 +24,62 @@ struct FieldParams {
     name: Option<syn::Ident>,
     data_type: syn::Ident
 }
+
+fn build_enum(name: &syn::Ident, e: &syn::DataEnum) -> TokenStream {
+    let variant_count = e.variants.len() as u32;
+
+    let mut index: u32 = 0;
+    let quoted: Vec<_> = e.variants.iter().map(|v|{
+        let name = &v.ident;
+        println!("FIELDS: {:?}", &v.fields);
+        let fields = fields_blah(&v.fields);
+        let variant_line = match &v.fields {
+            syn::Fields::Named(_) => {
+                quote! {
+                    #index => Self::#name {
+                        #(#fields,)*
+                    }
+                }
+            },
+            syn::Fields::Unnamed(_) => {
+                quote! {
+                    #index => Self::#name (
+                        #(#fields,)*
+                    )
+                }
+            },
+            syn::Fields::Unit => {
+                quote! {#index => Self::#name}
+            }
+        };
+
+
+        // let variant_line = quote! {
+        //     #index => Self::#name (
+        //         #(#fields,)*
+        //     )
+        // };
+        // let variant_line = quote! {
+        //     #index => Self::#name{}
+        // };
+        index += 1;
+        variant_line
+    }).collect();
+
+    quote! {
+        impl Dummy for #name {
+            fn dummy() -> Self {
+                let variant_id = random::<u32>()%#variant_count;
+                match variant_id {
+                   #(#quoted,)*
+                    // _ => panic!("Dummy Enum Variant {} Out of Bounds: {}", #name, variant_id)
+                    _ => todo!()
+                }
+            }
+        }
+    }.into()
+}
+
 
 fn get_field_type(field: &Field) -> FieldParams {
     let name = field.ident.clone();
@@ -42,12 +104,37 @@ fn get_field_type(field: &Field) -> FieldParams {
     FieldParams { name, data_type }
 }
 
+fn fields_blah(fields: &syn::Fields) -> Vec<proc_macro2::TokenStream> {
+    let unwrapped : Vec<_> = match fields {
+        syn::Fields::Named(f) => f.named.iter().collect(),
+        syn::Fields::Unnamed(f) => f.unnamed.iter().collect(),
+        syn::Fields::Unit => Vec::new(),
+    };
+
+    let output = unwrapped.iter().map(|f|{
+        let ft = get_field_type(f);
+        field_to_dummy_call(&ft)
+    }).collect();
+    output
+}
+
+fn field_to_dummy_call(fp: &FieldParams) -> proc_macro2::TokenStream {
+    let data_type = &fp.data_type;
+    match &fp.name {
+        // Some(name) => quote!{#name: 1},
+        // None => quote!{1}
+        Some(name) => quote!{#name: #data_type::dummy()},
+        None => quote!{#data_type::dummy()}
+    }
+}
+
 enum BracketStyle {
     ConstructorStyle,   // { and }
     FunctionStyle       // ( and )
 }
 
 fn impl_dummy_macro(ast: &syn::DeriveInput) -> TokenStream {
+    println!("ast:{:?}", ast);
     let mut lines = Vec::new();
     let mut bracket_style = BracketStyle::ConstructorStyle;
     match &ast.data {
@@ -80,6 +167,7 @@ fn impl_dummy_macro(ast: &syn::DeriveInput) -> TokenStream {
         },
         syn::Data::Enum(e) => {
             println!("enum");
+            return build_enum(&ast.ident, e).into()
             // I think I need to 'choose' in the generated function
             /*
                 impl Dummy for MyEnum {
@@ -106,22 +194,24 @@ fn impl_dummy_macro(ast: &syn::DeriveInput) -> TokenStream {
 
     println!("lines: {:?}", lines);
 
-    let quoted = lines.iter().map(|line| {
-        let data_type = &line.data_type;
-        match &line.name {
-            Some(name) => quote!{#name: #data_type::dummy()},
-            None => quote!{#data_type::dummy()}
-        }
-    });
+    let quoted: Vec<_> = lines.iter().map(|line| {
+        // let data_type = &line.data_type;
+        // match &line.name {
+        //     Some(name) => quote!{#name: #data_type::dummy()},
+        //     None => quote!{#data_type::dummy()}
+        // }
+        field_to_dummy_call(line)
+    }).collect();
     println!("quoted: {:?}", quoted);
 
     let name = &ast.ident;
 
     let gen = match bracket_style {
+        // TODO: see note at top for Brace / Parenthesis
         BracketStyle::ConstructorStyle => {
             quote! {
                 impl Dummy for #name {
-                    fn dummy() -> #name {
+                    fn dummy() -> Self {
                         #name {
                            #(#quoted,)*
                         }
@@ -132,7 +222,7 @@ fn impl_dummy_macro(ast: &syn::DeriveInput) -> TokenStream {
         BracketStyle::FunctionStyle => {
             quote! {
                 impl Dummy for #name {
-                    fn dummy() -> #name {
+                    fn dummy() -> Self {
                         #name (
                            #(#quoted,)*
                         )

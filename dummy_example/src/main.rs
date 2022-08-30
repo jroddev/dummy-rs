@@ -24,18 +24,29 @@ struct SSS {
 struct Tuple3(i32, f64, String);
 
 
-
-
 #[derive(Dummy, Debug)]
 struct Tuple0();
 
 
 
-// #[derive(Dummy)]
-// enum MyEnum {
-//     VariantA,
-//     VariantB(i32),
-//     VariantC{x: i32, y: i32, z:i32}
+#[derive(Debug, Dummy)]
+enum MyEnum {
+    VariantA,
+    VariantB(i32),
+    VariantC{x: i32, y: i32, z:i32},
+    VariantD(f32, f32)
+}
+
+// impl Dummy for MyEnum {
+//     fn dummy() -> Self {
+//         let variant = random::<u32>()%3;
+//         match variant {
+//             0 => Self::VariantA{},
+//             1 => Self::VariantB(i32::dummy()),
+//             2 => Self::VariantC{ x: i32::dummy(), y: i32::dummy(), z: i32::dummy() },
+//             _ => panic!("Dummy Enum Variant Out of Bounds: {}", variant)
+//         }
+//     }
 // }
 
 
@@ -59,4 +70,5 @@ fn main() {
     println!("other: {}", D::<i32>::dummy().0);
     println!("Unit type: {:?}", Tuple0::dummy());
     println!("Tuple type: {:?}", Tuple3::dummy());
+    println!("Enum: {:?}", MyEnum::dummy());
 }

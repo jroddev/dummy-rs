@@ -28,7 +28,6 @@ struct Tuple3(i32, f64, String);
 struct Tuple0();
 
 
-
 #[derive(Debug, Dummy)]
 enum MyEnum {
     VariantA,

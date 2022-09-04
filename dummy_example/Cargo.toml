@@ -6,6 +6,6 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-dummy_macro = { path = "../dummy_macro" }
-dummy_macro_derive = { path = "../dummy_macro_derive" }
+dummy = { path = "../dummy" }
+dummy_derive = { path = "../dummy_derive" }
 rand = "0.8.5"

@@ -1,6 +1,6 @@
 use rand::random;
-use dummy_macro::Dummy;
-use dummy_macro_derive::Dummy;
+use dummy::Dummy;
+use dummy_derive::Dummy;
 
 struct D<T>(T);
 impl Dummy for D<i32> {

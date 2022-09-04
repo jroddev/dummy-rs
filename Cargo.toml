@@ -1,6 +1,6 @@
 [workspace]
 members = [
-    "dummy_macro",
-    "dummy_macro_derive",
+    "dummy",
+    "dummy_derive",
     "dummy_example"
 ]

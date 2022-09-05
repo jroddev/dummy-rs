@@ -93,13 +93,25 @@ mod tests {
 
     #[test]
     fn test_string() {
-        assert_ne!(String::dummy(), String::dummy());
-        assert_ne!(String::dummy().len(), String::dummy().len());
         assert!(String::dummy().len() > 1);
+        assert!((0..10)
+                .map(|_| String::dummy().len())
+                .unique()
+                .count() > 1);
+        assert!((0..10)
+                .map(|_| String::dummy())
+                .unique()
+                .count() > 1);
 
-        assert_ne!(<&str>::dummy(), <&str>::dummy());
-        assert_ne!(<&str>::dummy().len(), <&str>::dummy().len());
         assert!(<&str>::dummy().len() > 1);
+        assert!((0..10)
+                .map(|_| <&str>::dummy().len())
+                .unique()
+                .count() > 1);
+        assert!((0..10)
+                .map(|_| <&str>::dummy())
+                .unique()
+                .count() > 1);
     }
 
     #[test]

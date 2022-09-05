@@ -6,16 +6,16 @@ mod code_builder;
 
 #[proc_macro_derive(Dummy)]
 pub fn dummy_macro_derive(input: TokenStream) -> TokenStream {
-    println!("token stream: {:?}", input);
+    // println!("token stream: {:?}", input);
     let ast = syn::parse(input).unwrap();
-    println!("----");
+    // println!("----");
 
     impl_dummy_macro(&ast).into()
 }
 
 
 fn impl_dummy_macro(ast: &syn::DeriveInput) -> proc_macro2::TokenStream {
-    println!("ast:{:?}", ast);
+    // println!("ast:{:?}", ast);
     let name = &ast.ident;
     let implementation = match &ast.data {
         syn::Data::Struct(s) => {
@@ -39,6 +39,6 @@ fn impl_dummy_macro(ast: &syn::DeriveInput) -> proc_macro2::TokenStream {
         }
     };
 
-    println!("generated: {}", gen);
+    // println!("generated: {}", gen);
     gen
 }

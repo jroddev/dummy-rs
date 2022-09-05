@@ -1,7 +1,10 @@
-pub mod base_types;
+/// Dummy documentation
+
+
 pub mod dummy;
 pub use crate::dummy::Dummy;
 
+pub mod dummy_impl;
 
 
 #[derive (Debug)]

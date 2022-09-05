@@ -97,9 +97,15 @@ mod tests {
         assert_ne!(String::dummy().len(), String::dummy().len());
         assert!(String::dummy().len() > 1);
 
-        let a: &str = dummy();
-        assert_ne!(&str::dummy(), &str::dummy());
-        assert_ne!(String::dummy().len(), String::dummy().len());
-        assert!(String::dummy().len() > 1);
+        assert_ne!(<&str>::dummy(), <&str>::dummy());
+        assert_ne!(<&str>::dummy().len(), <&str>::dummy().len());
+        assert!(<&str>::dummy().len() > 1);
+    }
+
+    #[test]
+    fn test_box() {
+        let a = Box::<i32>::dummy();
+        let b = Box::<i32>::dummy();
+        assert_ne!(a, b);
     }
 }

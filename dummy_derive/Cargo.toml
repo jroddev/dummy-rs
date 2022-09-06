@@ -1,5 +1,5 @@
 [package]
-name = "dummy_derive"
+name = "dummy-rs-derive"
 version = "0.1.0"
 edition = "2021"
 authors = ["jroddev <jroddev@gmail.com>"]
@@ -14,6 +14,6 @@ quote = "1.0.20"
 syn = { version = "1.0.98", features = ["extra-traits"] }
 
 [dev-dependencies]
-dummy = { path = "../dummy" }
+dummy-rs = { path = "../dummy" }
 rand = "0.8.5"
 

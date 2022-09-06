@@ -1,5 +1,5 @@
 [package]
-name = "dummy"
+name = "dummy-rs"
 version = "0.1.0"
 edition = "2021"
 authors = ["jroddev <jroddev@gmail.com>"]
@@ -9,11 +9,11 @@ repository = "https://github.com/jroddev/dummy-rs"
 
 [dependencies]
 rand = "0.8.5"
-dummy_derive = { optional = true, path = "../dummy_derive" }
+dummy-rs-derive = { optional = true, path = "../dummy_derive" }
 
 
 [features]
-derive = ["dummy_derive"]
+derive = ["dummy-rs-derive"]
 
 [dev-dependencies]
 itertools = "0.10.3"

@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use rand::random;
-use dummy::Dummy;
-use dummy_derive::Dummy;
+use dummy_rs::Dummy;
+use dummy_rs_derive::Dummy;
 
 #[derive(Dummy, Default, Debug, PartialEq)]
 struct Vector3 {

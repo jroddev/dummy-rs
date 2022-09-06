@@ -1,4 +1,4 @@
-use dummy::Dummy;
+use dummy_rs::Dummy;
 
 #[derive (Debug, PartialEq)]
 struct Custom {
